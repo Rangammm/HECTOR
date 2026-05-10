@@ -1,8 +1,8 @@
-# 🤖 HECTOR
 
-## AI-Powered Intelligent Assistant System — Odoo Hackathon 2026
 
-HECTOR is a modular, AI-driven assistant platform built to automate, streamline, and intelligently manage business operations. It replaces fragmented manual workflows with a unified, real-time, easy-to-use intelligent system — built for scale.
+## Enterprise Resource Planning (ERP) System for Traveloop — Odoo Hackathon 2026
+
+HECTOR is a full-stack ERP platform purpose-built for travel trips. It centralizes and automates the core operations of a travel company — from booking management and customer tracking to invoicing, trip scheduling, and real-time analytics — replacing scattered spreadsheets and manual processes with one unified, intelligent system.
 
 ---
 
@@ -10,13 +10,13 @@ HECTOR is a modular, AI-driven assistant platform built to automate, streamline,
 
 | Layer | Technology |
 |---|---|
-| Frontend | React.js / Vite |
-| Backend | Node.js / Python |
-| Database | PostgreSQL |
-| Cache | Redis |
-| AI/ML | Integrated AI APIs |
-| DevOps | Docker, Docker Compose |
-| Auth | JWT + OTP |
+| Frontend | React.js (Vite) |
+| Backend / Database | Supabase (PostgreSQL + Edge Functions) |
+| Database Language | PLpgSQL (Stored Procedures & Triggers) |
+| Auth | Supabase Auth (JWT) |
+| Storage | Supabase Storage |
+| Realtime | Supabase Realtime |
+| Build Tool | Vite |
 
 ---
 
@@ -24,21 +24,21 @@ HECTOR is a modular, AI-driven assistant platform built to automate, streamline,
 
 | # | Feature | Description | Module |
 |---|---|---|---|
-| 1 | **User Authentication** | Secure signup, login, and session management | Auth Module |
-| 2 | **OTP-Based Password Reset** | 6-digit numeric OTP via email, Redis-backed with TTL | Auth Module |
-| 3 | **AI Dashboard** | Real-time KPIs, analytics, and smart filters | Dashboard |
-| 4 | **Intelligent Query Engine** | Natural language processing for business queries | Core AI |
-| 5 | **Automated Workflows** | Trigger-based task automation across modules | Workflow Engine |
-| 6 | **Data Management** | Create, update, delete, and search records | Data Module |
-| 7 | **Multi-Warehouse / Location Support** | Manage operations across multiple locations | Core Module |
-| 8 | **Stock / Inventory Tracking** | Real-time inventory with ledger audit trail | Inventory Module |
-| 9 | **Receipts & Deliveries** | Incoming and outgoing stock with validation | Operations |
-| 10 | **Internal Transfers** | Move resources between locations seamlessly | Operations |
-| 11 | **Stock Adjustments** | Fix discrepancies with automatic ledger logging | Adjustments |
-| 12 | **Low Stock Alerts** | Automated notifications when stock hits threshold | Alerts |
-| 13 | **Role-Based Access** | Admin, Manager, Staff permissions | Access Control |
-| 14 | **Stock Ledger** | Immutable, append-only audit trail of all operations | Ledger |
-| 15 | **Smart Filters** | Dynamic, server-side filters across all modules | UI/Backend |
+| 1 | **User Authentication** | Secure login, signup, and role-based access via Supabase Auth | Auth |
+| 2 | **ERP Dashboard** | Real-time KPIs — bookings, revenue, trips, and alerts | Dashboard |
+| 3 | **Booking Management** | Create, update, cancel, and track travel bookings | Bookings |
+| 4 | **Customer Management** | Full CRM — passenger profiles, history, and contacts | Customers |
+| 5 | **Trip / Tour Management** | Define tours, destinations, pricing, and availability | Trips |
+| 6 | **Package Management** | Bundle travel packages with seats, hotels, and pricing | Packages |
+| 7 | **Invoice & Billing** | Auto-generate invoices, track payments, and dues | Finance |
+| 8 | **Staff / HR Management** | Manage agents, guides, and internal team records | HR |
+| 9 | **Inventory Tracking** | Monitor seats, rooms, vehicles, and available slots | Inventory |
+| 10 | **Supplier Management** | Track hotels, airlines, and third-party vendors | Suppliers |
+| 11 | **Real-Time Notifications** | Live updates for new bookings, cancellations, and alerts | Realtime |
+| 12 | **Reports & Analytics** | Revenue trends, booking stats, and custom filters | Reports |
+| 13 | **Role-Based Access** | Admin, Manager, Agent, and Staff permission levels | Access Control |
+| 14 | **Audit Logs** | Immutable record of all operations for compliance | Logs |
+| 15 | **Smart Filters** | Dynamic server-side filters across all modules | UI/Backend |
 
 ---
 
@@ -46,63 +46,73 @@ HECTOR is a modular, AI-driven assistant platform built to automate, streamline,
 
 | Feature / Endpoint / View | Description |
 |---|---|
-| **Authentication** | Auth Module |
-| User Signup | POST `/auth/signup` — Register new user |
-| User Login | POST `/auth/login` — Returns JWT token |
-| OTP Request | POST `/auth/request-reset-otp` — Sends 6-digit OTP |
-| OTP Verify | POST `/auth/verify-reset-otp` — Validates OTP from Redis |
-| Password Reset | POST `/auth/reset-password` — Resets using short-lived token |
-| OTP Redis TTL | OTP hashed and stored with expiry, single-use |
-| Rate Limiting | Rate-limit OTP requests to prevent abuse |
-| **Dashboard** | Inventory / Operations Dashboard |
-| KPI: Total Products | Displays real-time product count in stock |
-| KPI: Low / Out of Stock | Flags items below reorder threshold |
-| KPI: Pending Receipts | Count of incoming shipments awaiting validation |
-| KPI: Pending Deliveries | Count of outgoing orders awaiting dispatch |
-| KPI: Internal Transfers | Count of scheduled internal stock movements |
-| Filter: By Document Type | Filter dashboard cards by receipt/delivery/transfer |
-| Filter: By Status | Filter by pending/validated/cancelled |
-| Filter: By Location | Filter by warehouse or sub-location |
-| Filter: By Category | Filter by product category |
-| **Product Management** | Core Module — Products |
-| Create / Update Product | POST/PUT `/products` — Full CRUD on product catalog |
-| Product Fields | Name, SKU/Code, Category, Unit of Measure, Initial Stock |
-| Stock per Location | View availability across all warehouses |
-| Reordering Rules | Auto-trigger alerts/orders when stock falls below min |
-| GET /products | List all products with filters |
-| POST /products | Create new product |
-| PUT /products/:id | Update product details |
-| **Receipts (Incoming Stock)** | Core Module — Receipts |
-| Create Receipt | POST `/receipts` — New incoming shipment |
-| Add Supplier & Products | Attach supplier and line items to receipt |
-| Input Quantities | Enter received quantities per product |
-| Validate Receipt | PUT `/receipts/:id/validate` — Increases stock on validate |
-| **Delivery Orders (Outgoing Stock)** | Core Module — Deliveries |
-| Create Delivery | POST `/deliveries` — New outgoing order |
-| Pick / Pack Items | Mark items picked and packed for dispatch |
-| Validate Delivery | PUT `/deliveries/:id/validate` — Decreases stock on validate |
-| **Internal Transfers** | Core Module — Transfers |
-| Create Transfer | POST `/transfers` — Move stock between locations |
-| Complete Transfer | PUT `/transfers/:id/complete` — Stock total unchanged |
-| Ledger Logging | Every transfer logged in stock ledger |
-| **Stock Adjustments** | Core Module — Adjustments |
-| Create Adjustment | POST `/adjustments` — Correct stock discrepancies |
-| Select Product & Location | Choose item and its source location |
-| Enter Counted Quantity | System calculates difference and updates |
-| Log Adjustment | Immutable log entry created automatically |
-| **Stock Ledger** | Audit Trail |
-| Immutable Log | Every stock operation appended, never edited |
-| Audit Trail | Full history for compliance and review |
-| GET /ledger | Fetch ledger with date/product/location filters |
-| **Backend Requirements** | Non-Functional |
-| Transactional Updates | All stock changes wrapped in DB transactions |
-| Atomic Stock Updates | Prevent race conditions on concurrent operations |
-| Negative Stock Guard | System prevents stock going below zero unless forced |
-| JWT Authentication | Stateless auth via signed tokens |
-| Redis Caching | OTP storage, session caching, rate limiting |
-| PostgreSQL | Relational data for all inventory and user records |
-| Clear Error Messages | Human-readable errors on all API responses |
-| Server-Side Filters | All filtering logic handled on backend, not frontend |
+| **Authentication** | Supabase Auth Module |
+| User Signup | Supabase `auth.signUp()` — Register new user |
+| User Login | Supabase `auth.signInWithPassword()` — Returns session token |
+| Password Reset | Supabase `auth.resetPasswordForEmail()` — Email OTP reset |
+| Session Management | JWT tokens auto-refreshed via Supabase client |
+| Role Assignment | User roles stored in `profiles` table with RLS policies |
+| **Dashboard** | ERP Overview |
+| KPI: Total Bookings | Count of all active bookings in real-time |
+| KPI: Revenue Today | Sum of confirmed payments for current date |
+| KPI: Upcoming Trips | Count of tours scheduled in next 7 days |
+| KPI: Pending Invoices | Count of unpaid/overdue invoices |
+| KPI: New Customers | Newly registered customers this month |
+| Filter: By Date Range | Filter dashboard data by custom date periods |
+| Filter: By Agent | Filter by assigned travel agent |
+| Filter: By Status | Filter by confirmed/pending/cancelled |
+| **Booking Management** | Core Module — Bookings |
+| Create Booking | Insert into `bookings` table with trip and customer ref |
+| Update Booking | Modify booking details — dates, passengers, package |
+| Cancel Booking | Soft-delete with status update and inventory release |
+| Booking History | Full timeline of changes per booking |
+| Assign Agent | Link a staff member to manage the booking |
+| GET Bookings | Fetch bookings with filters (status, date, customer) |
+| **Customer Management** | Core Module — Customers (CRM) |
+| Add Customer | Create passenger profile with contact and passport info |
+| Update Customer | Edit profile details |
+| Customer History | View all past and upcoming bookings per customer |
+| Search Customer | Search by name, email, or phone |
+| **Trip / Tour Management** | Core Module — Trips |
+| Create Trip | Define destination, dates, capacity, and pricing |
+| Update Trip | Modify trip details or availability |
+| Cancel Trip | Mark trip inactive and notify booked customers |
+| Availability Check | Real-time seat/slot availability via Supabase Realtime |
+| GET Trips | List all trips with filters by destination and date |
+| **Package Management** | Core Module — Packages |
+| Create Package | Bundle trips, hotels, and transport into one package |
+| Update Package | Edit pricing, inclusions, and availability |
+| Package Pricing | Support for single, couple, and group pricing tiers |
+| **Invoice & Billing** | Finance Module |
+| Generate Invoice | Auto-create invoice on booking confirmation |
+| Mark as Paid | Update payment status and record payment method |
+| Partial Payment | Record advance payments with outstanding balance |
+| Overdue Alerts | Trigger notification for unpaid invoices past due date |
+| GET Invoices | Fetch invoices filtered by status, date, and customer |
+| **Staff / HR** | HR Module |
+| Add Staff | Create employee profile with role and department |
+| Assign Role | Set permissions — Admin, Manager, Agent, Staff |
+| View Staff Activity | Audit log of actions performed by each staff member |
+| **Inventory** | Inventory Module |
+| Track Seats | Monitor available seats per trip in real-time |
+| Track Rooms | Monitor hotel room availability per package |
+| Update on Booking | Inventory auto-decrements on confirmed booking |
+| Restore on Cancel | Inventory auto-restores on booking cancellation |
+| **Supplier Management** | Suppliers Module |
+| Add Supplier | Register hotel, airline, or transport vendor |
+| Link to Package | Associate supplier services with travel packages |
+| Track Contracts | Record pricing agreements per supplier |
+| **Database (PLpgSQL)** | Supabase PostgreSQL |
+| RLS Policies | Row Level Security enforced on all tables |
+| Stored Procedures | Business logic in PLpgSQL for atomic operations |
+| Triggers | Auto-update inventory and logs on data changes |
+| Realtime Subscriptions | Live updates pushed to frontend via Supabase channels |
+| **Non-Functional** | System Requirements |
+| Atomic Updates | All critical changes wrapped in DB transactions |
+| JWT Auth | Stateless session management via Supabase JWT |
+| Role-Based RLS | Data access restricted per user role at DB level |
+| Audit Trail | Every create/update/delete logged with timestamp and user |
+| Server-Side Filters | All filter logic processed on Supabase, not client-side |
 
 ---
 
@@ -110,84 +120,71 @@ HECTOR is a modular, AI-driven assistant platform built to automate, streamline,
 
 ### Prerequisites
 
-| Requirement | Version |
+| Requirement | Version / Detail |
 |---|---|
-| Node.js | 20.11.0+ |
-| Python | 3.9+ |
-| PostgreSQL | 13+ |
-| Redis | 6+ |
-| Docker Desktop | Latest (for Docker setup) |
+| Node.js | 18.0.0+ |
+| npm | 9.0.0+ |
+| Supabase Account | [supabase.com](https://supabase.com) — free tier works |
+| Git | Latest |
 
 ---
 
-### 🐳 Option A — Run with Docker (Recommended)
+### 🐳 Step-by-Step Setup
 
-| Step | Command | Description |
+| Step | Action | Command / Detail |
 |---|---|---|
-| 1 | `git clone https://github.com/Rangammm/HECTOR.git` | Clone the repo |
-| 2 | `cd HECTOR` | Enter project directory |
-| 3 | `cp .env.example .env` | Create environment file |
-| 4 | Edit `.env` with your values | Set DB, Redis, JWT secrets |
-| 5 | `docker-compose up --build` | Build and start all services |
-| 6 | Open `http://localhost:3000` | Access the frontend |
-| 7 | Open `http://localhost:8000/docs` | Access API documentation |
-
-**Rebuild specific service:**
-```bash
-docker-compose down
-docker-compose build --no-cache frontend
-docker-compose up
-```
+| 1 | Clone the repository | `git clone https://github.com/Rangammm/HECTOR.git` |
+| 2 | Enter project directory | `cd HECTOR` |
+| 3 | Create environment file | `cp .env.example .env` |
+| 4 | Add Supabase credentials | Edit `.env` — add your Project URL and Anon Key |
+| 5 | Install frontend dependencies | `cd Frontend && npm install` |
+| 6 | Run database migrations | Paste SQL from `src/` into Supabase SQL Editor |
+| 7 | Start the frontend | `npm run dev` |
+| 8 | Open the app | `http://localhost:5173` |
 
 ---
 
-### 💻 Option B — Run Locally (Without Docker)
+### 🔧 Supabase Configuration
 
-#### Step 1 — Clone & Configure
+**Step 1 — Create a Supabase project** at [supabase.com](https://supabase.com/dashboard)
 
-```bash
-git clone https://github.com/Rangammm/HECTOR.git
-cd HECTOR
-cp .env.example .env
-# Edit .env with your DB and Redis credentials
+**Step 2 — Get your credentials:**
+- Go to **Project Settings → API**
+- Copy **Project URL** and **anon / public key**
+
+**Step 3 — Fill in your `.env` file:**
+```env
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key-here
 ```
 
-#### Step 2 — Backend Setup
+**Step 4 — Run the database schema:**
+- Open **Supabase Dashboard → SQL Editor**
+- Paste and run all `.sql` files from the `src/` folder in order
 
-| Step | Command |
+---
+
+### 💻 Frontend Setup
+
+```bash
+cd Frontend
+npm install
+npm run dev
+```
+
+App runs at → `http://localhost:5173`
+
+---
+
+### 📁 Supabase (Backend) Setup
+
+| Task | Where to do it |
 |---|---|
-| Enter backend folder | `cd Backend` |
-| Create virtual environment | `python -m venv venv` |
-| Activate (Windows CMD) | `venv\Scripts\activate.bat` |
-| Activate (Windows PowerShell) | `.\venv\Scripts\Activate.ps1` |
-| Activate (Mac/Linux) | `source venv/bin/activate` |
-| Install dependencies | `pip install -r requirements.txt` |
-| Run migrations & seed | `python seed_data.py` |
-| Start backend server | `uvicorn app.main:app --reload --host 0.0.0.0 --port 8000` |
-
-**Set environment variables (Windows CMD):**
-```bash
-set DATABASE_URL=postgresql://user:password@localhost:5432/hector
-set REDIS_URL=redis://localhost:6379/0
-set SECRET_KEY=your-secret-key-here
-```
-
-**Set environment variables (Mac/Linux):**
-```bash
-export DATABASE_URL="postgresql://user:password@localhost:5432/hector"
-export REDIS_URL="redis://localhost:6379/0"
-export SECRET_KEY="your-secret-key-here"
-```
-
-#### Step 3 — Frontend Setup
-
-| Step | Command |
-|---|---|
-| Enter frontend folder | `cd Frontend` |
-| Install dependencies | `npm install` |
-| Set API URL (Mac/Linux) | `export NEXT_PUBLIC_BACKEND_URL="http://localhost:8000"` |
-| Set API URL (Windows CMD) | `set NEXT_PUBLIC_BACKEND_URL=http://localhost:8000` |
-| Start frontend server | `npm run dev` |
+| Create tables & schema | Supabase Dashboard → SQL Editor → run `src/` scripts |
+| Set RLS policies | SQL Editor — included in `src/` scripts |
+| Enable Realtime | Supabase Dashboard → Database → Replication |
+| Configure Auth providers | Supabase Dashboard → Authentication → Providers |
+| Deploy Edge Functions | Supabase Dashboard → Edge Functions |
 
 ---
 
@@ -195,24 +192,24 @@ export SECRET_KEY="your-secret-key-here"
 
 | Service | URL |
 |---|---|
-| Frontend App | http://localhost:3000 |
-| Backend API | http://localhost:8000 |
-| API Docs (Swagger) | http://localhost:8000/docs |
-| Signup Page | http://localhost:3000/signup |
-| Login Page | http://localhost:3000/login |
-| Dashboard | http://localhost:3000/dashboard |
+| Frontend App | http://localhost:5173 |
+| Supabase Dashboard | https://supabase.com/dashboard |
+| Supabase REST API | https://your-project-id.supabase.co/rest/v1/ |
+| Signup Page | http://localhost:5173/signup |
+| Login Page | http://localhost:5173/login |
+| Dashboard | http://localhost:5173/dashboard |
 
 ---
 
 ## 🔑 Sample Login Credentials
 
-> After running `seed_data.py`, use these test accounts:
+> Seed the database using the SQL scripts in `src/`, then log in with:
 
 | Role | Email | Password |
 |---|---|---|
 | Admin | admin@hector.com | admin123 |
 | Manager | manager@hector.com | manager123 |
-| Staff | staff@hector.com | staff123 |
+| Agent | agent@hector.com | agent123 |
 
 ---
 
@@ -220,13 +217,19 @@ export SECRET_KEY="your-secret-key-here"
 
 ```
 HECTOR/
-├── Backend/          # Python/Node.js API server
-├── Frontend/         # React.js frontend app
-├── src/              # Shared source / utilities
-├── .env.example      # Environment variable template
-├── .gitignore        # Git ignore rules
-├── README.md         # This file
-└── docker-compose.yml # Docker orchestration
+├── Backend/              # Supabase config, edge functions, helpers
+├── Frontend/             # React.js + Vite application
+│   ├── src/
+│   │   ├── components/   # Reusable UI components
+│   │   ├── pages/        # Route-level page components
+│   │   ├── hooks/        # Custom React hooks
+│   │   └── lib/          # Supabase client & utilities
+│   ├── package.json
+│   └── vite.config.js
+├── src/                  # SQL schemas, RLS policies, seed data
+├── .env.example          # Environment variable template
+├── .gitignore
+└── README.md
 ```
 
 ---
@@ -235,17 +238,17 @@ HECTOR/
 
 | Rule | Detail |
 |---|---|
-| Never commit `.env` | Use `.env.example` as template |
-| OTP is single-use | Invalidated immediately after verification |
-| JWT expiry | Tokens expire — refresh required |
-| Rate limiting | OTP and login endpoints are rate-limited |
-| Atomic DB updates | All stock changes use transactions to prevent corruption |
+| Never commit `.env` | Use `.env.example` — real keys stay local only |
+| Row Level Security | All Supabase tables protected by RLS policies |
+| Role-based access | Admins, Managers, and Agents see only permitted data |
+| JWT auto-refresh | Supabase handles token rotation automatically |
+| Anon key is safe | Supabase anon key is public — RLS is the real security guard |
 
 ---
 
 ## 👥 Contributors
 
-Built with ❤️ for **Odoo Hackathon 2026**
+Built with ❤️ for **Odoo Hackathon 2026** by Team HECTOR
 
 ---
 
