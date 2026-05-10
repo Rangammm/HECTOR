@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth.jsx';
-import { supabase } from '../lib/supabase.js';
+
 import SidebarLayout from '../components/SidebarLayout.jsx';
 import { Shield, Users, Map, Activity, ShieldAlert, BarChart3 } from 'lucide-react';
 import { Navigate } from 'react-router-dom';
@@ -13,7 +13,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     if (profile?.role !== 'admin') {
-      setLoading(false);
+      setTimeout(() => setLoading(false), 0);
       return;
     }
 

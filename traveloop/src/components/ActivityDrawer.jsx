@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Search } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useToast } from '../hooks/useToast.jsx';
 import { createActivity } from '../lib/api.js';
 

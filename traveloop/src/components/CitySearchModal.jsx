@@ -24,7 +24,7 @@ export default function CitySearchModal({ isOpen, onClose, tripId, onStopAdded }
       onStopAdded(newStop);
       addToast('Travel node initialized', 'success');
       onClose();
-    } catch (err) {
+    } catch {
       addToast('Failed to initialize node', 'error');
     } finally {
       setLoading(false);

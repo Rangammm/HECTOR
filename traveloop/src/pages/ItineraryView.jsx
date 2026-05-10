@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Share2, Printer, MapPin, Calendar as CalendarIcon, List, Clock, DollarSign, ExternalLink } from 'lucide-react';
+import { Share2, Printer, Calendar as CalendarIcon, List, Clock, DollarSign, ExternalLink } from 'lucide-react';
 import { useTrip } from '../hooks/useTrip.js';
 import { updateTrip } from '../lib/api.js';
 import { useToast } from '../hooks/useToast.jsx';
@@ -21,7 +21,7 @@ export default function ItineraryView() {
       const url = `${window.location.origin}/trip/${id}`;
       await navigator.clipboard.writeText(url);
       addToast('Public link copied to clipboard!', 'success');
-    } catch (err) {
+    } catch {
       addToast('Failed to share trip', 'error');
     }
   };
@@ -38,7 +38,7 @@ export default function ItineraryView() {
     <div className="max-w-3xl mx-auto py-8 relative">
       <div className="absolute top-10 bottom-10 left-[35px] w-0.5 bg-gradient-to-b from-[var(--accent)] to-[var(--pink)] opacity-30 no-print" />
       
-      {stops.map((stop, idx) => {
+      {stops.map((stop) => {
         const stopActs = activities[stop.id] || [];
         return (
           <div key={stop.id} className="mb-12 relative print-break">

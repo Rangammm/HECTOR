@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -57,7 +57,7 @@ function SortableStopCard({ stop, isActive, onClick, onDelete }) {
 
 export default function ItineraryBuilder() {
   const { id } = useParams();
-  const navigate = useNavigate();
+
   const { trip, stops, setStops, activities, setActivities, loading } = useTrip(id);
   const { addToast } = useToast();
   
@@ -72,7 +72,7 @@ export default function ItineraryBuilder() {
 
   useEffect(() => {
     if (stops.length > 0 && !activeStopId) {
-      setActiveStopId(stops[0].id);
+      setTimeout(() => setActiveStopId(stops[0].id), 0);
     }
   }, [stops, activeStopId]);
 
@@ -88,7 +88,7 @@ export default function ItineraryBuilder() {
     
     try {
       await reorderStops(id, newStops.map(s => s.id));
-    } catch (err) {
+    } catch {
       addToast('Failed to save new order', 'error');
     }
   };
@@ -100,7 +100,7 @@ export default function ItineraryBuilder() {
       setStops(stops.filter(s => s.id !== stopId));
       if (activeStopId === stopId) setActiveStopId(stops[0]?.id || null);
       addToast('Stop record removed', 'success');
-    } catch (err) {
+    } catch {
       addToast('Failed to remove stop', 'error');
     }
   };
@@ -114,7 +114,7 @@ export default function ItineraryBuilder() {
         updated[activeStopId] = updated[activeStopId].map(a => a.id === activityId ? { ...a, cost: newCost } : a);
         return updated;
       });
-    } catch (err) {
+    } catch {
       addToast('Failed to update cost', 'error');
     }
   };
@@ -128,7 +128,7 @@ export default function ItineraryBuilder() {
         return updated;
       });
       addToast('Activity record removed', 'success');
-    } catch (err) {
+    } catch {
       addToast('Failed to remove activity', 'error');
     }
   };

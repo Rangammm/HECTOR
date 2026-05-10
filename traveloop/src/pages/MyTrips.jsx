@@ -18,16 +18,17 @@ export default function MyTrips() {
   const [loading, setLoading] = useState(true);
   const [deleteTarget, setDeleteTarget] = useState(null);
 
-  const fetchTrips = async () => {
-    try {
-      if (user) {
-        const data = await getTrips(user.id);
-        setTrips(data || []);
-      }
-    } catch { /* graceful */ } finally { setLoading(false); }
-  };
-
-  useEffect(() => { fetchTrips(); }, [user]);
+  useEffect(() => { 
+    const fetchTrips = async () => {
+      try {
+        if (user) {
+          const data = await getTrips(user.id);
+          setTrips(data || []);
+        }
+      } catch { /* graceful */ } finally { setTimeout(() => setLoading(false), 0); }
+    };
+    fetchTrips(); 
+  }, [user]);
 
   const handleDelete = async () => {
     if (!deleteTarget) return;

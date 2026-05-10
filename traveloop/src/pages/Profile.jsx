@@ -19,7 +19,7 @@ export default function Profile() {
     try {
       await setProfile({ name: formData.name, bio: formData.bio });
       addToast('Profile updated successfully', 'success');
-    } catch (err) {
+    } catch {
       addToast('Failed to update profile', 'error');
     } finally {
       setLoading(false);

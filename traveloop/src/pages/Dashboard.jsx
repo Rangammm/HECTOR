@@ -5,7 +5,7 @@ import { getTrips, searchCities } from '../lib/api.js';
 import SidebarLayout from '../components/SidebarLayout.jsx';
 import TripCard from '../components/TripCard.jsx';
 import SkeletonCard from '../components/SkeletonCard.jsx';
-import { Plus, Map, Globe, Calendar, Wallet, ChevronRight, TrendingUp } from 'lucide-react';
+import { Plus, Map, Globe, Calendar, Wallet, TrendingUp } from 'lucide-react';
 import dayjs from 'dayjs';
 
 export default function Dashboard() {

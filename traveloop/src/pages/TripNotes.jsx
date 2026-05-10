@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth.jsx';
+
 import { getTripNotes, updateTripNotes } from '../lib/api.js';
 import SidebarLayout from '../components/SidebarLayout.jsx';
 import { useToast } from '../hooks/useToast.jsx';
@@ -8,7 +8,7 @@ import { Save, Loader2, FileText } from 'lucide-react';
 
 export default function TripNotes() {
   const { id } = useParams();
-  const { user } = useAuth();
+
   const { addToast } = useToast();
   
   const [notes, setNotes] = useState('');
@@ -20,7 +20,7 @@ export default function TripNotes() {
       try {
         const data = await getTripNotes(id);
         if (data) setNotes(data.notes || '');
-      } catch (err) {
+      } catch {
         addToast('Failed to load operational notes', 'error');
       } finally {
         setLoading(false);
@@ -33,7 +33,7 @@ export default function TripNotes() {
     try {
       await updateTripNotes(id, notes);
       addToast('Document synchronized successfully', 'success');
-    } catch (err) {
+    } catch {
       addToast('Failed to synchronize document', 'error');
     } finally {
       setSaving(false);

@@ -10,7 +10,7 @@ const CATEGORIES = ['Documents', 'Clothing', 'Electronics', 'Toiletries', 'Other
 
 export default function ChecklistPage() {
   const { id } = useParams();
-  const { trip } = useTrip(id);
+  useTrip(id);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const { addToast } = useToast();
@@ -22,7 +22,7 @@ export default function ChecklistPage() {
       try {
         const data = await getChecklist(id);
         setItems(data);
-      } catch (err) {
+      } catch {
         addToast('Failed to load checklist', 'error');
       } finally {
         setLoading(false);
@@ -36,7 +36,7 @@ export default function ChecklistPage() {
     setItems(items.map(i => i.id === itemId ? { ...i, is_packed: isPacked } : i));
     try {
       await toggleChecklistItem(itemId, isPacked);
-    } catch (err) {
+    } catch {
       // Revert on error
       setItems(items.map(i => i.id === itemId ? { ...i, is_packed: !isPacked } : i));
       addToast('Failed to update item', 'error');
@@ -55,7 +55,7 @@ export default function ChecklistPage() {
       });
       setItems([...items, added]);
       setNewItem({ ...newItem, name: '' });
-    } catch (err) {
+    } catch {
       addToast('Failed to add item', 'error');
     }
   };
@@ -64,7 +64,7 @@ export default function ChecklistPage() {
     try {
       await supabase.from('checklist_items').delete().eq('id', itemId);
       setItems(items.filter(i => i.id !== itemId));
-    } catch (err) {
+    } catch {
       addToast('Failed to delete item', 'error');
     }
   };
@@ -100,7 +100,7 @@ export default function ChecklistPage() {
       
       setItems([...items, ...data]);
       addToast(`Added ${data.length} suggested items`, 'success');
-    } catch (err) {
+    } catch {
       addToast('Failed to add suggestions', 'error');
     }
   };
@@ -116,7 +116,7 @@ export default function ChecklistPage() {
       
       await supabase.from('checklist_items').update({ is_packed: false }).in('id', packedIds);
       addToast('List reset', 'success');
-    } catch (err) {
+    } catch {
       addToast('Failed to reset list', 'error');
     }
   };

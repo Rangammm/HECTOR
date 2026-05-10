@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.jsx';
-import { Map, User, Shield, Compass, ChevronLeft, ChevronRight, LogOut, Search, Activity, Settings, Calendar, DollarSign, ListTodo, FileText } from 'lucide-react';
+import { Map, User, Shield, Compass, ChevronLeft, ChevronRight, LogOut, Search } from 'lucide-react';
 import { useState } from 'react';
 
 const NAV_ITEMS = [

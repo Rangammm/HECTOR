@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts';
-import { Plus, Trash2, Edit2, Check, DollarSign, TrendingDown, AlertCircle } from 'lucide-react';
+import { Plus, Trash2, Edit2, Check, DollarSign, AlertCircle } from 'lucide-react';
 import { useTrip } from '../hooks/useTrip.js';
 import { getBudgetItems, createBudgetItem, deleteBudgetItem, updateTrip } from '../lib/api.js';
 import { useToast } from '../hooks/useToast.jsx';
@@ -10,7 +10,7 @@ const COLORS = ['#6366f1', '#ec4899', '#22c55e', '#f59e0b', '#06b6d4'];
 
 export default function BudgetPage() {
   const { id } = useParams();
-  const { trip, setTrip, activities, stops } = useTrip(id);
+  const { trip, setTrip, activities } = useTrip(id);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const { addToast } = useToast();
@@ -28,7 +28,7 @@ export default function BudgetPage() {
         const data = await getBudgetItems(id);
         setItems(data);
         if (trip) setNewTotalBudget(trip.total_budget || 0);
-      } catch (err) {
+      } catch {
         addToast('Failed to load budget', 'error');
       } finally {
         setLoading(false);
@@ -43,7 +43,7 @@ export default function BudgetPage() {
       setTrip(updated);
       setIsEditingBudget(false);
       addToast('Budget updated', 'success');
-    } catch (err) {
+    } catch {
       addToast('Failed to update budget', 'error');
     }
   };
@@ -62,7 +62,7 @@ export default function BudgetPage() {
       setItems([...items, added]);
       setNewItem({ category: 'Transport', description: '', amount: '' });
       addToast('Expense added', 'success');
-    } catch (err) {
+    } catch {
       addToast('Failed to add expense', 'error');
     }
   };
@@ -72,7 +72,7 @@ export default function BudgetPage() {
       await deleteBudgetItem(itemId);
       setItems(items.filter(i => i.id !== itemId));
       addToast('Expense removed', 'success');
-    } catch (err) {
+    } catch {
       addToast('Failed to remove expense', 'error');
     }
   };
@@ -87,7 +87,7 @@ export default function BudgetPage() {
   
   const estimatedTotal = manualItemsTotal + activityCosts;
   const isOverBudget = trip.total_budget > 0 && estimatedTotal > trip.total_budget;
-  const savings = Math.max(0, (trip.total_budget || 0) - estimatedTotal);
+
 
   // Prepare Pie Chart Data
   const pieData = categories.map(cat => {
