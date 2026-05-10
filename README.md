@@ -1,197 +1,254 @@
-<<<<<<< HEAD
-# Traveloop — Backend Setup
+# 🤖 HECTOR
 
-## Prerequisites
-- [Supabase](https://supabase.com) project (free tier works)
-- Node.js 18+
+## AI-Powered Intelligent Assistant System — Odoo Hackathon 2026
 
-## 1. Supabase Setup
-
-1. Create a project at [supabase.com/dashboard](https://supabase.com/dashboard)
-2. Go to **SQL Editor** and run the files in order:
-
-```
-supabase/schema.sql   ← tables, triggers, indexes
-supabase/rls.sql      ← row-level security policies
-```
-
-3. Create the demo user via **Authentication → Users → Add User**:
-   - Email: `demo@traveloop.in`
-   - Password: `Demo@1234`
-
-4. Run the seed file:
-```
-supabase/seed.sql     ← cities, demo trips, activities
-```
-
-## 2. Environment Variables
-
-Copy `.env.example` → `.env` and fill in your Supabase credentials:
-
-```env
-VITE_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJ...
-```
-
-Find these in **Supabase Dashboard → Settings → API**.
-
-## 3. Project Structure
-
-```
-supabase/
-  schema.sql        # Database tables & triggers
-  rls.sql           # Row-level security policies
-  seed.sql          # 56 cities + 3 demo trips
-src/lib/
-  supabase.js       # Supabase client
-  api.js            # All query functions
-.env.example        # Env template
-```
-
-## 4. API Reference (`src/lib/api.js`)
-
-| Domain    | Functions |
-|-----------|-----------|
-| Trips     | `getTrips(userId)` `getTripById(id)` `createTrip()` `updateTrip()` `deleteTrip()` |
-| Stops     | `getStops(tripId)` `createStop()` `updateStop()` `deleteStop()` `reorderStops()` |
-| Activities| `getActivities(stopId)` `createActivity()` `deleteActivity()` |
-| Budget    | `getBudgetItems(tripId)` `createBudgetItem()` `deleteBudgetItem()` |
-| Checklist | `getChecklist(tripId)` `addChecklistItem()` `toggleChecklistItem()` |
-| Notes     | `getNotes(tripId)` `createNote()` `deleteNote()` |
-| Cities    | `searchCities(query, region)` |
-| Profile   | `getUserProfile(userId)` `updateProfile()` |
-
-## 5. RLS Summary
-
-| Table      | Owner R/W | Public Read | Admin Read All |
-|------------|-----------|-------------|----------------|
-| profiles   | ✅        | ❌          | ✅             |
-| trips      | ✅        | if `is_public` | ✅          |
-| stops      | ✅        | if trip public | ✅          |
-| activities | ✅        | if trip public | ✅          |
-| budget     | ✅        | if trip public | ✅          |
-| checklist  | ✅        | if trip public | ✅          |
-| notes      | ✅        | if trip public | ✅          |
-| cities     | admin only| ✅          | ✅             |
-
-## 6. Demo Account
-
-| Field    | Value |
-|----------|-------|
-| Email    | `demo@traveloop.in` |
-| Password | `Demo@1234` |
-| Role     | `admin` |
-| Trips    | Japan Explorer 🇯🇵, European Highlights 🇪🇺, SE Asia Backpacking 🌏 |
-=======
-
-#  Odoo Hackathon 2026
-
-An innovative smart solution developed for the Odoo Hackathon 2026 focused on solving real-world problems through automation, modern web technologies, and scalable architecture.
+HECTOR is a modular, AI-driven assistant platform built to automate, streamline, and intelligently manage business operations. It replaces fragmented manual workflows with a unified, real-time, easy-to-use intelligent system — built for scale.
 
 ---
 
-#  Project Overview
+## 🚀 Tech Stack
 
-This project was created to provide an efficient and user-friendly platform that combines modern frontend development with backend automation and intelligent workflows. The system is designed to improve productivity, simplify operations, and deliver a smooth user experience with optimized performance.
-
-The project demonstrates problem-solving skills, full-stack development knowledge, and the ability to build scalable applications suitable for real-world use cases.
-
----
-
-#  Features & Benefits
-
-| Feature                      | Benefit                                         |
-| ---------------------------- | ----------------------------------------------- |
-| Responsive User Interface    | Provides smooth experience across all devices   |
-| Smart Automation Workflow    | Reduces manual work and increases efficiency    |
-| Real-Time Data Processing    | Faster and more accurate system responses       |
-| Secure Authentication System | Protects user data and improves security        |
-| Scalable Architecture        | Supports future growth and feature expansion    |
-| Optimized Performance        | Faster loading speed and better user experience |
-| Clean Dashboard Design       | Easy navigation and improved usability          |
-| Modular Code Structure       | Easier maintenance and development              |
+| Layer | Technology |
+|---|---|
+| Frontend | React.js / Vite |
+| Backend | Node.js / Python |
+| Database | PostgreSQL |
+| Cache | Redis |
+| AI/ML | Integrated AI APIs |
+| DevOps | Docker, Docker Compose |
+| Auth | JWT + OTP |
 
 ---
 
-#  Technologies Used
+## ✨ Features Overview
 
-| Category   | Technologies          |
-| ---------- | --------------------- |
-| Frontend   | HTML, CSS, JavaScript |
-| Backend    | Node.js / Python      |
-| Database   | MongoDB / PostgreSQL  |
-| Tools      | Git, GitHub, VS Code  |
-| Deployment | Vercel / Render       |
-
----
-
-#  Project Structure
-
-| Folder/File    | Description                            |
-| -------------- | -------------------------------------- |
-| `/frontend`    | Contains frontend source code          |
-| `/backend`     | Contains backend APIs and server logic |
-| `/assets`      | Images, icons, and static resources    |
-| `/components`  | Reusable UI components                 |
-| `README.md`    | Project documentation                  |
-| `package.json` | Dependencies and project configuration |
+| # | Feature | Description | Module |
+|---|---|---|---|
+| 1 | **User Authentication** | Secure signup, login, and session management | Auth Module |
+| 2 | **OTP-Based Password Reset** | 6-digit numeric OTP via email, Redis-backed with TTL | Auth Module |
+| 3 | **AI Dashboard** | Real-time KPIs, analytics, and smart filters | Dashboard |
+| 4 | **Intelligent Query Engine** | Natural language processing for business queries | Core AI |
+| 5 | **Automated Workflows** | Trigger-based task automation across modules | Workflow Engine |
+| 6 | **Data Management** | Create, update, delete, and search records | Data Module |
+| 7 | **Multi-Warehouse / Location Support** | Manage operations across multiple locations | Core Module |
+| 8 | **Stock / Inventory Tracking** | Real-time inventory with ledger audit trail | Inventory Module |
+| 9 | **Receipts & Deliveries** | Incoming and outgoing stock with validation | Operations |
+| 10 | **Internal Transfers** | Move resources between locations seamlessly | Operations |
+| 11 | **Stock Adjustments** | Fix discrepancies with automatic ledger logging | Adjustments |
+| 12 | **Low Stock Alerts** | Automated notifications when stock hits threshold | Alerts |
+| 13 | **Role-Based Access** | Admin, Manager, Staff permissions | Access Control |
+| 14 | **Stock Ledger** | Immutable, append-only audit trail of all operations | Ledger |
+| 15 | **Smart Filters** | Dynamic, server-side filters across all modules | UI/Backend |
 
 ---
 
-#  Installation Steps
+## 🗺️ Traceability Table
 
-## 1. Clone the Repository
+| Feature / Endpoint / View | Description |
+|---|---|
+| **Authentication** | Auth Module |
+| User Signup | POST `/auth/signup` — Register new user |
+| User Login | POST `/auth/login` — Returns JWT token |
+| OTP Request | POST `/auth/request-reset-otp` — Sends 6-digit OTP |
+| OTP Verify | POST `/auth/verify-reset-otp` — Validates OTP from Redis |
+| Password Reset | POST `/auth/reset-password` — Resets using short-lived token |
+| OTP Redis TTL | OTP hashed and stored with expiry, single-use |
+| Rate Limiting | Rate-limit OTP requests to prevent abuse |
+| **Dashboard** | Inventory / Operations Dashboard |
+| KPI: Total Products | Displays real-time product count in stock |
+| KPI: Low / Out of Stock | Flags items below reorder threshold |
+| KPI: Pending Receipts | Count of incoming shipments awaiting validation |
+| KPI: Pending Deliveries | Count of outgoing orders awaiting dispatch |
+| KPI: Internal Transfers | Count of scheduled internal stock movements |
+| Filter: By Document Type | Filter dashboard cards by receipt/delivery/transfer |
+| Filter: By Status | Filter by pending/validated/cancelled |
+| Filter: By Location | Filter by warehouse or sub-location |
+| Filter: By Category | Filter by product category |
+| **Product Management** | Core Module — Products |
+| Create / Update Product | POST/PUT `/products` — Full CRUD on product catalog |
+| Product Fields | Name, SKU/Code, Category, Unit of Measure, Initial Stock |
+| Stock per Location | View availability across all warehouses |
+| Reordering Rules | Auto-trigger alerts/orders when stock falls below min |
+| GET /products | List all products with filters |
+| POST /products | Create new product |
+| PUT /products/:id | Update product details |
+| **Receipts (Incoming Stock)** | Core Module — Receipts |
+| Create Receipt | POST `/receipts` — New incoming shipment |
+| Add Supplier & Products | Attach supplier and line items to receipt |
+| Input Quantities | Enter received quantities per product |
+| Validate Receipt | PUT `/receipts/:id/validate` — Increases stock on validate |
+| **Delivery Orders (Outgoing Stock)** | Core Module — Deliveries |
+| Create Delivery | POST `/deliveries` — New outgoing order |
+| Pick / Pack Items | Mark items picked and packed for dispatch |
+| Validate Delivery | PUT `/deliveries/:id/validate` — Decreases stock on validate |
+| **Internal Transfers** | Core Module — Transfers |
+| Create Transfer | POST `/transfers` — Move stock between locations |
+| Complete Transfer | PUT `/transfers/:id/complete` — Stock total unchanged |
+| Ledger Logging | Every transfer logged in stock ledger |
+| **Stock Adjustments** | Core Module — Adjustments |
+| Create Adjustment | POST `/adjustments` — Correct stock discrepancies |
+| Select Product & Location | Choose item and its source location |
+| Enter Counted Quantity | System calculates difference and updates |
+| Log Adjustment | Immutable log entry created automatically |
+| **Stock Ledger** | Audit Trail |
+| Immutable Log | Every stock operation appended, never edited |
+| Audit Trail | Full history for compliance and review |
+| GET /ledger | Fetch ledger with date/product/location filters |
+| **Backend Requirements** | Non-Functional |
+| Transactional Updates | All stock changes wrapped in DB transactions |
+| Atomic Stock Updates | Prevent race conditions on concurrent operations |
+| Negative Stock Guard | System prevents stock going below zero unless forced |
+| JWT Authentication | Stateless auth via signed tokens |
+| Redis Caching | OTP storage, session caching, rate limiting |
+| PostgreSQL | Relational data for all inventory and user records |
+| Clear Error Messages | Human-readable errors on all API responses |
+| Server-Side Filters | All filtering logic handled on backend, not frontend |
+
+---
+
+## ⚙️ Sequential Setup Guide
+
+### Prerequisites
+
+| Requirement | Version |
+|---|---|
+| Node.js | 20.11.0+ |
+| Python | 3.9+ |
+| PostgreSQL | 13+ |
+| Redis | 6+ |
+| Docker Desktop | Latest (for Docker setup) |
+
+---
+
+### 🐳 Option A — Run with Docker (Recommended)
+
+| Step | Command | Description |
+|---|---|---|
+| 1 | `git clone https://github.com/Rangammm/HECTOR.git` | Clone the repo |
+| 2 | `cd HECTOR` | Enter project directory |
+| 3 | `cp .env.example .env` | Create environment file |
+| 4 | Edit `.env` with your values | Set DB, Redis, JWT secrets |
+| 5 | `docker-compose up --build` | Build and start all services |
+| 6 | Open `http://localhost:3000` | Access the frontend |
+| 7 | Open `http://localhost:8000/docs` | Access API documentation |
+
+**Rebuild specific service:**
+```bash
+docker-compose down
+docker-compose build --no-cache frontend
+docker-compose up
+```
+
+---
+
+### 💻 Option B — Run Locally (Without Docker)
+
+#### Step 1 — Clone & Configure
 
 ```bash
-git clone https://github.com/Rangammm/odoo-hackathon-2026.git
+git clone https://github.com/Rangammm/HECTOR.git
+cd HECTOR
+cp .env.example .env
+# Edit .env with your DB and Redis credentials
 ```
 
-## 2. Navigate to Project Folder
+#### Step 2 — Backend Setup
 
+| Step | Command |
+|---|---|
+| Enter backend folder | `cd Backend` |
+| Create virtual environment | `python -m venv venv` |
+| Activate (Windows CMD) | `venv\Scripts\activate.bat` |
+| Activate (Windows PowerShell) | `.\venv\Scripts\Activate.ps1` |
+| Activate (Mac/Linux) | `source venv/bin/activate` |
+| Install dependencies | `pip install -r requirements.txt` |
+| Run migrations & seed | `python seed_data.py` |
+| Start backend server | `uvicorn app.main:app --reload --host 0.0.0.0 --port 8000` |
+
+**Set environment variables (Windows CMD):**
 ```bash
-cd odoo-hackathon-2026
+set DATABASE_URL=postgresql://user:password@localhost:5432/hector
+set REDIS_URL=redis://localhost:6379/0
+set SECRET_KEY=your-secret-key-here
 ```
 
-## 3. Install Dependencies
-
+**Set environment variables (Mac/Linux):**
 ```bash
-npm install
+export DATABASE_URL="postgresql://user:password@localhost:5432/hector"
+export REDIS_URL="redis://localhost:6379/0"
+export SECRET_KEY="your-secret-key-here"
 ```
 
-## 4. Start Development Server
+#### Step 3 — Frontend Setup
 
-```bash
-npm start
+| Step | Command |
+|---|---|
+| Enter frontend folder | `cd Frontend` |
+| Install dependencies | `npm install` |
+| Set API URL (Mac/Linux) | `export NEXT_PUBLIC_BACKEND_URL="http://localhost:8000"` |
+| Set API URL (Windows CMD) | `set NEXT_PUBLIC_BACKEND_URL=http://localhost:8000` |
+| Start frontend server | `npm run dev` |
+
+---
+
+## 🌐 Access URLs
+
+| Service | URL |
+|---|---|
+| Frontend App | http://localhost:3000 |
+| Backend API | http://localhost:8000 |
+| API Docs (Swagger) | http://localhost:8000/docs |
+| Signup Page | http://localhost:3000/signup |
+| Login Page | http://localhost:3000/login |
+| Dashboard | http://localhost:3000/dashboard |
+
+---
+
+## 🔑 Sample Login Credentials
+
+> After running `seed_data.py`, use these test accounts:
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | admin@hector.com | admin123 |
+| Manager | manager@hector.com | manager123 |
+| Staff | staff@hector.com | staff123 |
+
+---
+
+## 🗂️ Project Structure
+
 ```
-
-## 5. Run Backend Server
-
-```bash
-npm run server
+HECTOR/
+├── Backend/          # Python/Node.js API server
+├── Frontend/         # React.js frontend app
+├── src/              # Shared source / utilities
+├── .env.example      # Environment variable template
+├── .gitignore        # Git ignore rules
+├── README.md         # This file
+└── docker-compose.yml # Docker orchestration
 ```
 
 ---
 
-#  How the Project Works
+## 🔐 Security Notes
 
-The system allows users to interact with a modern web platform where requests are processed efficiently through backend services and automated workflows. Data is handled securely and displayed dynamically to provide a fast and seamless experience.
-
-The architecture is designed to maintain scalability, making it easier to integrate future features and improvements.
+| Rule | Detail |
+|---|---|
+| Never commit `.env` | Use `.env.example` as template |
+| OTP is single-use | Invalidated immediately after verification |
+| JWT expiry | Tokens expire — refresh required |
+| Rate limiting | OTP and login endpoints are rate-limited |
+| Atomic DB updates | All stock changes use transactions to prevent corruption |
 
 ---
 
-#  Future Improvements
+## 👥 Contributors
 
-* AI-powered analytics and insights
-* Enhanced dashboard and UI experience
-* Cloud deployment optimization
-* Advanced automation features
-* Improved mobile responsiveness
-* Better scalability and security enhancements
+Built with ❤️ for **Odoo Hackathon 2026**
 
+---
 
+## 📄 License
 
-# 📜 License
-
-This project is licensed under the MIT License.
->>>>>>> d14c8a1fbebcbac798946d4dada5b495c9565571
+This project is open-source and available under the [MIT License](LICENSE).
